@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>autoConfirm.js - フォームの確認画面を自動生成</title>
+<link href="./css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.ba-hashchange.min.js"></script>
+<script type="text/javascript" src="js/autoConfirm.js"></script>
+<style type="text/css">
+.autoConfirm {
+margin: 20px auto;
+padding: 20px;
+width: 320px;
+border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+background-color: #EFE0DC;
+}
+.autoConfirm label, .autoConfirm legend {
+display: block;
+padding-top: 20px;
+padding-bottom: 5px;
+}
+.autoConfirm fieldset label {
+display: inline;
+padding: 0px 10px 0px 0px;
+color: #000;
+}
+.autoConfirm .buttons {
+margin-top: 20px;
+text-align: center;
+}
+.autoConfirm input[type="text"], .autoConfirm input[type="password"], .autoConfirm select, .autoConfirm textarea {
+border: 1px solid #999;
+width: 300px;
+padding: 5px;
+border-radius: 3px;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+}
+.autoConfirm input[type="button"], .autoConfirm input[type="submit"] {
+padding: 5px 30px;
+}
+.autoConfirm input, .autoConfirm select, .autoConfirm textarea {
+font-family: "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, sans-serif;
+}
+.autoConfirmVal {
+background-color: #FFFFFF;
+padding: 10px;
+display: block;
+border-radius: 6px;
+-webkit-border-radius: 6px;
+-moz-border-radius: 6px;
+}
+.autoConfirmBack {
+display: none;
+}
+</style>
+</head>
+
+<body>
+<div id="wrapper">
+  <header>
+    <h1>autoConfirm.js</h1>
+    <p>フォームの確認画面を自動生成します</p>
+    <p><a href="download.php" class="download_button">Download the files</a></p>
+    </header>
+  <div id="content">
+    <form method="post" action="/portfolio/auto_confirm/result.php" class="autoConfirm">
+      <h2>Sample</h2>
+      <label for="name">お名前</label>
+      <input type="text" name="name" id="name">
+      <label for="name">お名前</label>
+      <input type="text" name="name" id="name">
+      <fieldset>
+      <label for="free">好きな言葉</label>
+      <textarea name="free" cols="30" rows="5" id="free"></textarea>
+      <div class="buttons">
+	<input type="button" name="button" value="戻る" class="autoConfirmBack">
+	<input type="submit" name="button" value="送信">
+	</div>
+      </form>
+</body>

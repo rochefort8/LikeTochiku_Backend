@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)http://studio-key.com/Sample/jquery/FormCheck/sample2.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>お問い合わせフォームなどの確認画面をページリロード無しで表示する</title>
+<link href="./aaa_files/style.css" rel="stylesheet" type="text/css">
+<link href="./aaa_files/validationEngine.jquery.css" rel="stylesheet" type="text/css">
+<script src="./aaa_files/jquery.min.js"></script>
+<script type="text/javascript" src="./aaa_files/jquery.validationEngine.js"></script>
+<script type="text/javascript" src="./aaa_files/jquery.validationEngine-ja.js"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+/*
+ * jQuery-Validation-Engineの設定
+ */
+  jQuery("#form").validationEngine( 'attach', {
+        ajaxFormValidation: true
+      , onBeforeAjaxFormValidation: beforeCall //送信ボタンを押した時に実行される関数
+  });
+
+/*
+ * 確認ボタンが押されたら
+ */
+  function beforeCall(){
+    $(".fm").each( function() {
+      var id = $(this).attr("id");
+      var fm = $("#"+id);
+      
+      switch( fm.prop("type") ){
+        case 'text':
+        case 'password':
+        case 'select-one':
+          $(fm).after('<span class="hide del">'+fm.val()+'</span>');
+        break;
+        case 'textarea':
+          var val = fm.val();
+          val = val.replace(/\n/g, "<br />"); 
+          $(fm).after('<span class="hide del">'+val+'</span>');
+
+        case 'file':
+          var val = fm.val();
+          console.log(val);
+        break;
+      }
+      
+    });
+
+    change(true);
+  }
+
+/*
+ * リセットボタンが押されたら
+ */
+  $(document).on('click','#reset',function(){
+    reset();
+  });
+/*
+ * 訂正ボタンが押されたら
+ */
+  $(document).on('click','#back',function(){
+    change();
+  });
+/*
+ * 送信ボタンが押されたら
+ */
+  $(document).on('click','#send',function(){
+    var data = $("#form").serialize(); console.log(data);
+    
+      $.ajax({
+          type: "POST",
+          url: "upload.php",
+          data: data,
+          success: function(callback){
+              console.log("Success") ;
+          },
+          error: function(callback){
+              console.log("Error") ;
+          }
+      });
+    $("#form").html('送信しまし');
+    reset();
+  });
+  
+/*
+ * フォームを初期化する
+ */
+  var reset = function(type){
+      $('input,textarea').not('input[type=\"radio\"],input[type=\"checkbox\"],:hidden, :button, :submit,:reset').val('');
+      $('input[type=\"radio\"], input[type=\"checkbox\"],select').removeAttr('checked').removeAttr('selected');
+      $("option").attr('selected',false);
+  };
+  
+/*
+ * 表示・非表示を制御する
+ */
+  var change = function(type){
+    if(type === true){
+      $(".def").hide();
+      $(".hide").show();
+    }else{
+      $(".def").show();
+      $(".hide").hide();
+      $(".del").remove();
+    }
+  };
+});
+</script>
+<style id="style-1-cropbar-clipper">/* Copyright 2014 Evernote Corporation. All rights reserved. */
+.en-markup-crop-options {
+    top: 18px !important;
+    left: 50% !important;
+    margin-left: -100px !important;
+    width: 200px !important;
+    border: 2px rgba(255,255,255,.38) solid !important;
+    border-radius: 4px !important;
+}
+
+.en-markup-crop-options div div:first-of-type {
+    margin-left: 0px !important;
+}
+</style><</head>
+
+<body>
+<div id="container">
+  
+<form id="form" name="form" method="post">
+<div class="fm_table">
+  
+    <dl class="fm_tr">
+      <dt class="fm_th"><span class="fred def">※</span>名称ローマ字)</dt>
+      <dd class="fm_td">
+<!--
+        <input name="str" type="text" id="str" size="35" maxlength="30" class="def fm validate[required] text-input">
+-->
+        <input name="str" type="text" id="str" size="35" maxlength="30" class="def fm text-input">
+      </dd>
+    </dl>
+  
+    <dl class="fm_tr">
+      <dt class="fm_th"><span class="fred def">※</span>名称日本語)/</dt>
+      <dd class="fm_td">
+<!--
+        <input name="pass" type="text" id="pass" size="35" maxlength="30" class="def fm validate[required] text-input">
+-->
+        <input name="pass" type="text" id="pass" size="35" maxlength="30" class="def fm text-input">
+      </dd>
+    </dl>
+    
+    <dl class="fm_tr">
+      <dt class="fm_th">タイプ</dt>
+      <dd class="fm_td">
+        <select name="sel" id="sel" class="def fm">
+          <option value=""></option>
+          <option value="1">Trappist</option>
+          <option value="2">Belgian White</option>
+          <option value="3">Red</option>
+          <option value="4">Lambic</option>
+          <option value="5">Abbey</option>
+          <option value="6">Golden Ale</option>
+          <option value="7">Saison</option>
+          <option value="7">Christmas</option>
+          <option value="99">Others</option>
+        </select>
+      </dd>
+    </dl>
+  
+
+
+
+    <dl class="fm_tr">
+      <dt class="fm_th">説明</dt>
+      <dd class="fm_td">
+        <textarea name="text" id="text" cols="35" raws="10" class="def fm" ></textarea>
+      </dd>
+    </dl>
+
+    <dl class="fm_tr">
+      <dt class="fm_th">イメージ</dt>
+      <dd class="fm_td">
+	<input type="file" name="imagefile" size="30">
+      </dd>
+    </dl>
+
+  </div>
+  <div class="fm_button">
+    <input type="button" id="reset" value="リセット" class="def">
+    <input type="submit" id="check" value="送信内容の確認 &gt;&gt;" class="def">
+    <input type="button" id="back" value="&lt;&lt; 訂正" class="hide">
+    <input type="button" id="send" value="送信 &gt;&gt;" class="hide">
+  </div>
+</form>
+  
+</div>
+<div id="footer">Copyright©2014 <a href="http://studio-key.com/">STUDIO KEY</a> Allright reserved.</div>
+  
+<!--
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-11800613-7']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<script type="text/javascript" src="http://studio-key.com/ra/script.php"></script><noscript><p><img src="http://studio-key.com/ra/track.php" alt="" width="1" height="1" /></p></noscript> 
+-->
+
+
+
+</body></html>

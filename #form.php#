@@ -1,0 +1,13 @@
+<?php
+
+$text = $_POST['text'] ;
+
+require_once(__DIR__ . '/php-console/src/PhpConsole/__autoload.php');
+if(PhpConsole\Connector::getInstance()->isActiveClient()) {
+
+}
+
+PhpConsole\Helper::register();
+debug("Hellp") ;
+
+?>

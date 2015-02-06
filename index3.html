@@ -1,0 +1,193 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>お問い合わせフォームなどの確認画面をページリロード無しで表示する</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  
+/*
+ * 確認ボタンが押されたら
+ */
+  $(document).on('click','#check',function(){
+    
+    $(".fm").each( function() {
+      var id = $(this).attr("id");
+      var fm = $("#"+id);
+      
+      switch( fm.prop("type") ){
+        case 'text':
+        case 'password':
+        case 'select-one':
+          $(fm).after('<span class="hide del">'+fm.val()+'</span>');
+        break;
+        case 'radio':
+          var val = $("#"+id+":checked");
+          if( $(val).prop('checked') ) {
+            $(fm).after('<span class="hide del">'+val.val()+'</span>');
+          }
+        break;
+        case 'checkbox':
+          var val = $("#"+id+":checked");
+          if( $(val).prop('checked') ) {
+            $(fm).after('<span class="hide del">'+val.val()+'</span>');
+          }
+        break;
+        case 'textarea':
+          var val = fm.val();
+          val = val.replace(/\n/g, "<br />"); 
+          $(fm).after('<span class="hide del">'+val+'</span>');
+        break;
+      }
+      
+    });
+
+    change(true);
+  });
+  
+/*
+ * リセットボタンが押されたら
+ */
+  $(document).on('click','#reset',function(){
+    reset();
+  });
+/*
+ * 訂正ボタンが押されたら
+ */
+  $(document).on('click','#back',function(){
+    change();
+  });
+/*
+ * 送信ボタンが押されたら
+ */
+  $(document).on('click','#send',function(){
+    var data = $("#form").serialize(); console.log(data);
+    
+      $.ajax({
+          type: "POST",
+          url: "form.php",
+          data: data,
+          success: function(callback){
+            
+          }
+      });
+    
+    $("#form").html('送信しました');
+    reset();
+  });
+  
+  
+/*
+ * フォームを初期化する
+ */
+  var reset = function(type){
+      $('input,textarea').not('input[type=\"radio\"],input[type=\"checkbox\"],:hidden, :button, :submit,:reset').val('');
+      $('input[type=\"radio\"], input[type=\"checkbox\"],select').removeAttr('checked').removeAttr('selected');
+      $("option").attr('selected',false);
+  };
+  
+/*
+ * 表示・非表示を制御する
+ */
+  var change = function(type){
+    if(type === true){
+      $(".def").hide();
+      $(".hide").show();
+    }else{
+      $(".def").show();
+      $(".hide").hide();
+      $(".del").remove();
+    }
+  };
+});
+</script>
+</head>
+
+<body>
+<div id="container">
+  
+<form id="form">
+<div class="fm_table">
+  
+    <dl class="fm_tr">
+      <dt class="fm_th"><span class="fred def">※</span>テキスト</dt>
+      <dd class="fm_td">
+        <input name="str" type="text" id="str" size="35" maxlength="30" class="def fm">
+      </dd>
+    </dl>
+  
+    <dl class="fm_tr">
+      <dt class="fm_th">パスワード</dt>
+      <dd class="fm_td">
+        <input name="pass" type="password" id="pass" size="35" maxlength="30" class="def fm">
+      </dd>
+    </dl>
+    
+    <dl class="fm_tr">
+      <dt class="fm_th">セレクト</dt>
+      <dd class="fm_td">
+        <select name="sel" id="sel" class="def fm">
+          <option value=""></option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </dd>
+    </dl>
+  
+    <dl class="fm_tr">
+      <dt class="fm_th">ラジオ</dt>
+      <dd class="fm_td">
+        <input type="radio" name="radio" id="radio1" value="赤" class="def fm"><label for="radio1" class="def"> 赤</label>
+        <input type="radio" name="radio" id="radio2" value="青" class="def fm"><label for="radio2" class="def"> 青</label>
+      </dd>
+    </dl>
+    
+    <dl class="fm_tr">
+      <dt class="fm_th">チェックボックス</dt>
+      <dd class="fm_td">
+        <input type="checkbox" name="checkbox1" id="checkbox1" value="桃" class="def fm"><label for="checkbox1" class="def"> 桃 </label>
+        <input type="checkbox" name="checkbox2" id="checkbox2" value="緑" class="def fm"><label for="checkbox2" class="def"> 緑 </label>
+      </dd>
+    </dl>
+  
+    <dl class="fm_tr">
+      <dt class="fm_th">テキストエリア</dt>
+      <dd class="fm_td">
+        <textarea name="text" id="text"  class="def fm"></textarea>
+      </dd>
+    </dl>
+
+  </div>
+  <div class="fm_button">
+    <input type="button" id="reset" value="リセット" class="def">
+    <input type="button" id="check" value="送信内容の確認 &gt;&gt;" class="def">
+    <input type="button" id="back" value="&lt;&lt; 訂正" class="hide">
+    <input type="button" id="send" value="送信 &gt;&gt;" class="hide">
+  </div>
+</form>
+  
+</div>
+<div id="footer">Copyright&copy;2014 <a href="http://studio-key.com/">STUDIO KEY</a> Allright reserved.</div>
+  
+<!--
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-11800613-7']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+<script type="text/javascript" src="http://studio-key.com/ra/script.php"></script><noscript><p><img src="http://studio-key.com/ra/track.php" alt="" width="1" height="1" /></p></noscript> 
+-->
+
+</body>
+</html>
