@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<belgianbeer>
+  <beer name="LOCHEFORT 10">
+    <name_en>LOCHEFORT 10</name_en>
+    <name_jp>ろしゅふぉーる１０</name_jp>
+    <type>Trappist</type>
+    <description>LOCHEFORT_10.txt</description>
+    <image>LOCHEFORT_10.jpg</image>
+  </beer>
+</belgianbeer>
