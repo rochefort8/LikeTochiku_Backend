@@ -8,6 +8,7 @@
 
 <?php
 
+
 // POSTされたデータを取得します。
 $beerName = isset($_POST["beerName"])? $_POST["beerName"] : "";
 $beerName_JP = isset($_POST["beerName_JP"])? $_POST["beerName_JP"] : "";
@@ -58,13 +59,59 @@ function create_zip_archive($dirname)
 }
 
 
+require '/tmp/parse-php-sdk/autoload.php';
+
+date_default_timezone_set('Asia/Tokyo');
+
+use Parse\ParseClient;
+use Parse\ParseObject;
+use Parse\ParseFile;
+
+
+function upload_to_parse( $name, $image, $description, $archive )
+{
+
+ParseClient::initialize(
+	'rLfiUPlbIE5orN0Al07gpotnvIpqwTUpoQlkhjO0',
+	'LnIgqdYSz8krs6iKBdH5XtGqglkyjzuSEHTnNbEC', 
+	'jtNDkVGTpaVeregAuvlTYOUCErbKnSMgE7F6x9Fo'
+	);
+
+    $obj = ParseObject::create("BelgianBeer");
+
+if (0) {
+    $file_image       = ParseFile::createFromFile( $image ,basename($image)) ;
+    $file_description = ParseFile::createFromFile( $description ,basename($description)) ;
+    $file_arcihve     = ParseFile::createFromFile( $archive ,basename($archive)) ;
+
+    $obj->set( "beerName" , $name ) ;
+    $obj->set( "beerImage" , $file_image ) ;
+    $obj->set( "beerDescription" , $file_description ) ;
+    $obj->set( "archive" , $file_archive ) ;
+} else {
+    $file = ParseFile::createFromFile("/tmp/BELLE_VUE_KRIEK/BELLE_VUE_KRIEK.jpg","BELLE_VUE_KRIEK.jpg") ;
+
+
+    $obj = ParseObject::create("BelgianBeer");
+    $obj->set("beerImage", $file);
+}
+
+    $obj->save() ;
+
+print $name . "\n" ;
+print $image . "\n" ;
+print $description . "\n" ;
+print $archive . "\n" ;
+
+}
+
 $base_filename = generate_file_basename($beerName) ;
 
 $tmp_dirname = "/tmp/" . $base_filename ;
 $dirname = $base_filename ;
 
 //rmdir ( $tmp_dirname ) ;
-system ( "rm -rf" . " " . $tmp_dirname ) ;
+//system ( "rm -rf" . " " . $tmp_dirname ) ;
 mkdir ( $tmp_dirname ) ;
 rename ($beerImage_uploaded_path, $tmp_dirname . "/" . $base_filename . ".jpg") ;
 
@@ -75,9 +122,11 @@ file_put_contents( $tmp_dirname . "/" . $base_filename . ".txt" , $beerDescripti
 chdir('/tmp/') ;
 create_zip_archive($dirname) ;
 
-chdir('../') ;
+$image = $tmp_dirname . "/" . $base_filename . ".jpg" ;
+$description = $tmp_dirname . "/" . $base_filename . ".txt" ;
+$archive = "/tmp/" . $base_filename . ".zip" ;
 
-print "File /tmp/" . $base_filename . ".zip" . " was created." ;
+upload_to_parse( $beerName, $image, $description, $archive ) ;
 ?>
 
 </body>
