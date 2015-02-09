@@ -15,13 +15,18 @@ ParseClient::initialize(
 	);
 
 
+	try {
 
-    $file = ParseFile::createFromFile("/tmp/BELLE_VUE_KRIEK/BELLE_VUE_KRIEK.jpg","BELLE_VUE_KRIEK.jpg") ;
+    $file = ParseFile::createFromFile("/tmp/ROCHEFORT_10/ROCHEFORT_10.jpg","ROCHEFORT_10.jpg") ;
 
 
     $obj = ParseObject::create("BelgianBeer");
     $obj->set("file", $file);
+
     $obj->save();
 
+} catch (ParseException $ex) {
+    echo "Error: " . $ex->getCode() . " " . $ex->getMessage();
+}
 
 ?>

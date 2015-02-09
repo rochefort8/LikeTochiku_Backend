@@ -58,8 +58,7 @@ function create_zip_archive($dirname)
 	}
 }
 
-
-require '/tmp/parse-php-sdk/autoload.php';
+require 'parse-php-sdk/autoload.php';
 
 date_default_timezone_set('Asia/Tokyo');
 
@@ -67,42 +66,26 @@ use Parse\ParseClient;
 use Parse\ParseObject;
 use Parse\ParseFile;
 
-
-function upload_to_parse( $name, $image, $description, $archive )
-{
-
 ParseClient::initialize(
 	'rLfiUPlbIE5orN0Al07gpotnvIpqwTUpoQlkhjO0',
 	'LnIgqdYSz8krs6iKBdH5XtGqglkyjzuSEHTnNbEC', 
 	'jtNDkVGTpaVeregAuvlTYOUCErbKnSMgE7F6x9Fo'
 	);
 
+function upload_to_parse( $name, $image, $description, $archive )
+{
     $obj = ParseObject::create("BelgianBeer");
 
-if (0) {
     $file_image       = ParseFile::createFromFile( $image ,basename($image)) ;
     $file_description = ParseFile::createFromFile( $description ,basename($description)) ;
-    $file_arcihve     = ParseFile::createFromFile( $archive ,basename($archive)) ;
+    $file_archive     = ParseFile::createFromFile( $archive ,basename($archive)) ;
 
     $obj->set( "beerName" , $name ) ;
     $obj->set( "beerImage" , $file_image ) ;
     $obj->set( "beerDescription" , $file_description ) ;
     $obj->set( "archive" , $file_archive ) ;
-} else {
-    $file = ParseFile::createFromFile("/tmp/BELLE_VUE_KRIEK/BELLE_VUE_KRIEK.jpg","BELLE_VUE_KRIEK.jpg") ;
-
-
-    $obj = ParseObject::create("BelgianBeer");
-    $obj->set("beerImage", $file);
-}
 
     $obj->save() ;
-
-print $name . "\n" ;
-print $image . "\n" ;
-print $description . "\n" ;
-print $archive . "\n" ;
-
 }
 
 $base_filename = generate_file_basename($beerName) ;
@@ -127,7 +110,42 @@ $description = $tmp_dirname . "/" . $base_filename . ".txt" ;
 $archive = "/tmp/" . $base_filename . ".zip" ;
 
 upload_to_parse( $beerName, $image, $description, $archive ) ;
+
+$upload_success = true ;
+
+require_once("header.php");
 ?>
+
+<body>
+<div class="main">
+<div id="contactInfo">
+
+<?php if($upload_success){ ?>
+	<h1>お問い合わせ（完了）</h1>
+	<div id="thanks">
+		<p>
+			お問い合わせを送信しました。<br>
+			後日担当者から、ご連絡を差し上げます。今しばらくお待ちくださいませ。<br>
+			<br>
+			※日程によりましては、お返事に時間がかかる場合がございます。何卒ご了承くださいませ。
+		</p>
+	</div>
+<?php } ?>
+
+<?php if(!$upload_success){ ?>
+	<h1>お問い合わせ（送信失敗）</h1>
+	<p>
+		<span class="error">送信に失敗しました。</span>
+	</p>
+<?php } ?>
+	  <div id="btn_area">
+		  <input type="button" name="back_btn" value="戻る"
+		         onclick="location.href='./index.php'"" class="btn">
+
+	  </div>
+
+</div><!--/contactInfo-->
+</div><!--/main-->
 
 </body>
 </html>
