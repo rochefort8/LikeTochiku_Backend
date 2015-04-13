@@ -8,7 +8,6 @@
 
 <?php
 
-
 // POSTされたデータを取得します。
 $beerName = isset($_POST["beerName"])? $_POST["beerName"] : "";
 $beerName_JP = isset($_POST["beerName_JP"])? $_POST["beerName_JP"] : "";
@@ -74,37 +73,16 @@ ParseClient::initialize(
 
 function upload_to_parse( $name, $image, $description, $archive )
 {
-    $obj = ParseObject::create("BelgianBeer");
+    $obj = ParseObject::create("Photo");
 
     $file_image       = ParseFile::createFromFile( $image ,basename($image)) ;
-
-    $obj->set( "image" , $name ) ;
-    $obj->set( "caption" , $description ) ;
+    $obj->set( "image" , $file_image ) ;
+    $obj->set( "caption" , $name ) ;
     $obj->save() ;
 }
 
-$base_filename = generate_file_basename($beerName) ;
 
-$tmp_dirname = "/tmp/" . $base_filename ;
-$dirname = $base_filename ;
-
-//rmdir ( $tmp_dirname ) ;
-//system ( "rm -rf" . " " . $tmp_dirname ) ;
-mkdir ( $tmp_dirname ) ;
-rename ($beerImage_uploaded_path, $tmp_dirname . "/" . $base_filename . ".jpg") ;
-
-create_xml( $beerName, $beerName_JP, $beerType,
-	    $base_filename . ".txt", $base_filename . ".jpg",
-	    $tmp_dirname . "/" . "beer.xml" ) ;
-file_put_contents( $tmp_dirname . "/" . $base_filename . ".txt" , $beerDescription) ;
-chdir('/tmp/') ;
-create_zip_archive($dirname) ;
-
-$image = $tmp_dirname . "/" . $base_filename . ".jpg" ;
-$description = $tmp_dirname . "/" . $base_filename . ".txt" ;
-$archive = "/tmp/" . $base_filename . ".zip" ;
-
-upload_to_parse( $beerName, $image, $description, $archive ) ;
+upload_to_parse( $beerName_JP, $beerImage_uploaded_path,"", "" ) ;
 
 $upload_success = true ;
 
