@@ -1,15 +1,32 @@
 <?php
 
-$beerName = isset($_POST["beerName"])? $_POST["beerName"] : "";
-$beerName_JP = isset($_POST["beerName_JP"])? $_POST["beerName_JP"] : "";
-$beerType = isset($_POST["beerType"])? $_POST["beerType"] : "";
-$beerDescription = isset($_POST["beerDescription"])? $_POST["beerDescription"] : "";
-$beerImage = isset($_FILES["beerImage"]["name"])? $_FILES["beerImage"]["name"] : "" ; 
-$beerImage_uploaded_path = "/tmp/" . $_FILES["beerImage"]["name"] ;
+$title = isset($_POST["title"])? $_POST["title"] : "";
+$difficulty = isset($_POST["difficulty"])? $_POST["difficulty"] : "";
+$quiz = isset($_POST["quiz"])? $_POST["quiz"] : "";
+$quiz_image = isset($_POST["quiz_image"])? $_POST["quiz_image"] : "";
+$choice1 = isset($_POST["choice1"])? $_POST["choice1"] : "";
+$choice2 = isset($_POST["choice2"])? $_POST["choice2"] : "";
+$choice3 = isset($_POST["choice3"])? $_POST["choice3"] : "";
+$answer = isset($_POST["answer"])? $_POST["answer"] : "";
+$description = isset($_POST["description"])? $_POST["description"] : "";
 
-if (is_uploaded_file($_FILES["beerImage"]["tmp_name"])) {
-  if (move_uploaded_file($_FILES["beerImage"]["tmp_name"], "/tmp/" . $_FILES["beerImage"]["name"])) {
-    chmod("/tmp/" . $_FILES["beerImage"]["name"], 0644);
+$quiz_image = isset($_FILES["quiz_image"]["name"])? $_FILES["quiz_image"]["name"] : "" ; 
+$answer_image = isset($_FILES["answer_image"]["name"])? $_FILES["answer_image"]["name"] : "" ; 
+$quiz_image_uploaded_path = "/tmp/" . $_FILES["quiz_image"]["name"] ;
+$answer_image_uploaded_path = "/tmp/" . $_FILES["answer_image"]["name"] ;
+
+if (is_uploaded_file($_FILES["quiz_image"]["tmp_name"])) {
+  if (move_uploaded_file($_FILES["quiz_image"]["tmp_name"], "/tmp/" . $_FILES["quiz_image"]["name"])) {
+    chmod("/tmp/" . $_FILES["quiz_image"]["name"], 0644);
+  } else {
+  }
+} else {
+
+}
+
+if (is_uploaded_file($_FILES["answer_image"]["tmp_name"])) {
+  if (move_uploaded_file($_FILES["answer_image"]["tmp_name"], "/tmp/" . $_FILES["answer_image"]["name"])) {
+    chmod("/tmp/" . $_FILES["answer_image"]["name"], 0644);
   } else {
   }
 } else {
@@ -26,7 +43,7 @@ require_once("header.php");
 <div class="main">
 <div id="contactInfo">
 
-	<h1>お問い合わせ（確認）</h1>
+	<h1>（確認）</h1>
 
 	<?php if(count($err_msg) > 0){?>
 	<div class="error">
@@ -45,36 +62,64 @@ require_once("header.php");
 	<?php }?>
 
 	<form name="form1" action="./send.php" method="post">
-	  <input type="hidden" name="beerName" value="<?php echo htmlspecialchars($beerName, ENT_QUOTES, "UTF-8");?>">
-	  <input type="hidden" name="beerName_JP" value="<?php echo htmlspecialchars($beerName_JP, ENT_QUOTES, "UTF-8");?>">
-	  <input type="hidden" name="beerType" value="<?php echo htmlspecialchars($beerType, ENT_QUOTES, "UTF-8");?>">
-	  <input type="hidden" name="beerDescription" value="<?php echo htmlspecialchars($beerDescription, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="title" value="<?php echo htmlspecialchars($title, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="difficulity" value="<?php echo htmlspecialchars($difficulty, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="quiz" value="<?php echo htmlspecialchars($quiz, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="choice1" value="<?php echo htmlspecialchars($choice1, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="choice2" value="<?php echo htmlspecialchars($choice2, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="choice3" value="<?php echo htmlspecialchars($choice3, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="answer" value="<?php echo htmlspecialchars($answer, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="description" value="<?php echo htmlspecialchars($description, ENT_QUOTES, "UTF-8");?>">
 
-	  <input type="hidden" name="beerImage" value="<?php echo htmlspecialchars($beerImage, ENT_QUOTES, "UTF-8");?>">
-	  <input type="hidden" name="beerImage_uploaded_path" value="<?php echo htmlspecialchars($beerImage_uploaded_path, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="quiz_image" value="<?php echo htmlspecialchars($quiz_image, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="answer_image" value="<?php echo htmlspecialchars($answer_image, ENT_QUOTES, "UTF-8");?>">
+
+	  <input type="hidden" name="quiz_image_uploaded_path" value="<?php echo htmlspecialchars($quiz_image_uploaded_path, ENT_QUOTES, "UTF-8");?>">
+	  <input type="hidden" name="answer_image_uploaded_path" value="<?php echo htmlspecialchars($answer_image_uploaded_path, ENT_QUOTES, "UTF-8");?>">
 
 	  <table  class="contact_tbl">
 	    <tr>
-	      <th>名称(ローマ字）</th>
+	      <th>タイトル</th>
 	      <td>
-	        <?php echo htmlspecialchars($beerName, ENT_QUOTES, "UTF-8");?>
+	        <?php echo htmlspecialchars($title, ENT_QUOTES, "UTF-8");?>
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>名称(日本語）</th>
-	      <td><?php echo htmlspecialchars($beerName_JP, ENT_QUOTES, "UTF-8");?></td>
+	      <th>難易度</th>
+	      <td><?php echo htmlspecialchars($difficulty, ENT_QUOTES, "UTF-8");?></td>
 	    </tr>
 	    <tr>
-	      <th>種類</th>
-	      <td><?php echo nl2br(htmlspecialchars($beerType, ENT_QUOTES, "UTF-8"));?></td>
+	      <th>クイズ</th>
+	      <td><?php echo nl2br(htmlspecialchars($quiz, ENT_QUOTES, "UTF-8"));?></td>
 	    </tr>
 	    <tr>
-	      <th>説明</th>
-	      <td><?php echo nl2br(htmlspecialchars($beerDescription, ENT_QUOTES, "UTF-8"));?></td>	    </tr>
+	      <th>クイズ画像</th>
+	      <td><?php echo nl2br(htmlspecialchars($quiz_image, ENT_QUOTES, "UTF-8"));?></td>	    </tr>
 	    <tr>
-	      <th>画像</th>
-	      <td><?php echo nl2br(htmlspecialchars($beerImage, ENT_QUOTES, "UTF-8"));?></td>
+	      <th>選択肢1</th>
+	      <td><?php echo nl2br(htmlspecialchars($choice1, ENT_QUOTES, "UTF-8"));?></td>
 	    </tr>
+	    <tr>
+	      <th>選択肢2</th>
+	      <td><?php echo nl2br(htmlspecialchars($choice2, ENT_QUOTES, "UTF-8"));?></td>
+	    </tr>
+	    <tr>
+	      <th>選択肢3</th>
+	      <td><?php echo nl2br(htmlspecialchars($choice3, ENT_QUOTES, "UTF-8"));?></td>
+	    </tr>
+	    <tr>
+	      <th>回答</th>
+	      <td><?php echo nl2br(htmlspecialchars($answer, ENT_QUOTES, "UTF-8"));?></td>
+	    </tr>
+	    <tr>
+	      <th>解説</th>
+	      <td><?php echo nl2br(htmlspecialchars($description, ENT_QUOTES, "UTF-8"));?></td>
+	    </tr>
+	    <tr>
+	      <th>回答画像</th>
+	      <td><?php echo nl2br(htmlspecialchars($answer_image, ENT_QUOTES, "UTF-8"));?></td>	    </tr>
+	    <tr>
+
 	  </table>
 	  <div id="btn_area">
 		  <input type="button" name="back_btn" value="戻る"

@@ -57,7 +57,7 @@ function create_zip_archive($dirname)
 	}
 }
 
-require 'parse-php-sdk/autoload.php';
+require '../parse-php-sdk/autoload.php';
 
 date_default_timezone_set('Asia/Tokyo');
 

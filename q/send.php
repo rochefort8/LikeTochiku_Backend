@@ -10,55 +10,24 @@
 
 
 // POSTされたデータを取得します。
-$beerName = isset($_POST["beerName"])? $_POST["beerName"] : "";
-$beerName_JP = isset($_POST["beerName_JP"])? $_POST["beerName_JP"] : "";
-$beerType = isset($_POST["beerType"])? $_POST["beerType"] : "";
-$beerDescription = isset($_POST["beerDescription"])? $_POST["beerDescription"] : "";
-$beerImage = isset($_POST["beerImage"])? $_POST["beerImage"] : "";
-$beerImage_uploaded_path = isset($_POST["beerImage_uploaded_path"])? $_POST["beerImage_uploaded_path"] : "";
+$title = isset($_POST["title"])? $_POST["title"] : "";
+$difficulty = isset($_POST["difficulty"])? $_POST["difficulty"] : "";
+$quiz = isset($_POST["quiz"])? $_POST["quiz"] : "";
+$quiz_image = isset($_POST["quiz_image"])? $_POST["quiz_image"] : "";
+$choice1 = isset($_POST["choice1"])? $_POST["choice1"] : "";
+$choice2 = isset($_POST["choice2"])? $_POST["choice2"] : "";
+$choice3 = isset($_POST["choice3"])? $_POST["choice3"] : "";
+$answer = isset($_POST["answer"])? $_POST["answer"] : "";
+$description = isset($_POST["description"])? $_POST["description"] : "";
 
-function generate_file_basename($str)
-{
-	$_str=str_replace(" ","_",$str); 
-	return $_str ;
-}
 
-function create_xml($name_en,$name_jp,$type,$description,$image,$saveto)
-{
-	$dom = new DomDocument('1.0', 'UTF-8');
+$quiz_image = isset($_POST["quiz_image"])? $_POST["quiz_image"] : "";
+$answer_image = isset($_POST["answer_image"])? $_POST["answer_image"] : "";
 
-	$prefs = $dom->appendChild($dom->createElement('belgianbeer'));
-	$pref = $prefs->appendChild($dom->createElement('beer'));
+$quiz_image_uploaded_path = isset($_POST["quiz_image_uploaded_path"])? $_POST["quiz_image_uploaded_path"] : "";
+$answer_image_uploaded_path = isset($_POST["answer_image_uploaded_path"])? $_POST["answer_image_uploaded_path"] : "";
 
-	$pref->setAttribute('name', $name_en);
-	$pref->appendChild($dom->createElement('name_en', $name_en));
-	$pref->appendChild($dom->createElement('name_jp', $name_jp));
-	$pref->appendChild($dom->createElement('type', $type));
-	$pref->appendChild($dom->createElement('description', $description));
-	$pref->appendChild($dom->createElement('image', $image));
-
-	$dom->formatOutput = true;
-	$dom->save($saveto) ;
-}
-
-function create_zip_archive($dirname)
-{
-	$files = array_diff( scandir($dirname), array(".", "..") );
-
-	$zip = new ZipArchive();
-	$res = $zip->open($dirname . ".zip", ZipArchive::CREATE);
- 	
-	if($res === true){
-	     foreach($files as $file){
-	            $zip->addFile($dirname . "/" . $file);
-	     }
-    	     $zip->close();
-	} else {
-	    echo 'Error Code: ' . $res;
-	}
-}
-
-require 'parse-php-sdk/autoload.php';
+require '../parse-php-sdk/autoload.php';
 
 date_default_timezone_set('Asia/Tokyo');
 
@@ -72,46 +41,25 @@ ParseClient::initialize(
 	'jtNDkVGTpaVeregAuvlTYOUCErbKnSMgE7F6x9Fo'
 	);
 
-function upload_to_parse( $name, $image, $description, $archive )
-{
-    $obj = ParseObject::create("BelgianBeer");
+    $obj = ParseObject::create("Quiz");
 
-    $file_image       = ParseFile::createFromFile( $image ,basename($image)) ;
-    $file_description = ParseFile::createFromFile( $description ,basename($description)) ;
-    $file_archive     = ParseFile::createFromFile( $archive ,basename($archive)) ;
+    $obj->set( "title" , $title ) ;
+    $obj->set( "quiz" , $quiz ) ;
+    $file_quiz_image  = ParseFile::createFromFile( $quiz_image_uploaded_path ,basename($quiz_image_uploaded_path )) ;
 
-    $obj->set( "beerName" , $name ) ;
-    $obj->set( "beerImage" , $file_image ) ;
-    $obj->set( "beerDescription" , $file_description ) ;
-    $obj->set( "archive" , $file_archive ) ;
+    $obj->set( "quiz_image" , $file_quiz_image ) ;
+    $obj->set( "choice1" , $choice1 ) ;
+    $obj->set( "choice2" , $choice2 ) ;
+    $obj->set( "choice3" , $choice3 ) ;
 
+    $obj->set( "answer" , $answer ) ;
+    $file_answer_image  = ParseFile::createFromFile( $answer_image_uploaded_path ,basename($answer_image_uploaded_path )) ;
+    $obj->set( "answer_image" , $file_answer_image ) ;
+    $obj->set( "description" , $description ) ;
     $obj->save() ;
-}
 
-$base_filename = generate_file_basename($beerName) ;
 
-$tmp_dirname = "/tmp/" . $base_filename ;
-$dirname = $base_filename ;
-
-//rmdir ( $tmp_dirname ) ;
-//system ( "rm -rf" . " " . $tmp_dirname ) ;
-mkdir ( $tmp_dirname ) ;
-rename ($beerImage_uploaded_path, $tmp_dirname . "/" . $base_filename . ".jpg") ;
-
-create_xml( $beerName, $beerName_JP, $beerType,
-	    $base_filename . ".txt", $base_filename . ".jpg",
-	    $tmp_dirname . "/" . "beer.xml" ) ;
-file_put_contents( $tmp_dirname . "/" . $base_filename . ".txt" , $beerDescription) ;
-chdir('/tmp/') ;
-create_zip_archive($dirname) ;
-
-$image = $tmp_dirname . "/" . $base_filename . ".jpg" ;
-$description = $tmp_dirname . "/" . $base_filename . ".txt" ;
-$archive = "/tmp/" . $base_filename . ".zip" ;
-
-upload_to_parse( $beerName, $image, $description, $archive ) ;
-
-$upload_success = true ;
+$upload_success=1 ;
 
 require_once("header.php");
 ?>

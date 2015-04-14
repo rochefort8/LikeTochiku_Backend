@@ -66,7 +66,7 @@ require_once("header.php");
 	      </td>
 	    </tr>
 	    <tr>
-	      <th><span class="f_red"></span>難易度</th>
+	      <th><span class="f_red"></span>回答</th>
 	      <td>
 	              <select name="answer" id="answer">
 				<option value="1">1</option>
