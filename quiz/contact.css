@@ -1,0 +1,136 @@
+/*
+ * お問い合わせフォーム
+ *
+ * 株式会社i-on [イオン] i-on Co., Ltd.
+ * http://www.i-ongroup.com/
+ * 〒263-0032　千葉市稲毛区稲毛台町15-8
+ * Tel  ： 043-243-9729
+ * Fax  ： 043-246-5653
+ */
+@charset "UTF-8";
+
+/**********************************
+	共通
+***********************************/
+
+body{
+	color: #5c6166;
+}
+
+.main {  
+    width: 100%;  
+}  
+.main div   {  
+    margin: 0 auto;  
+}
+
+div#contactInfo{
+	width:700px;
+	text-align: left;
+	font-size:14px;
+	line-height:18px;
+}
+
+div#contactInfo h1{
+	/*font-size:24px;*/
+	margin:30px 0 30px 0;
+	font-size: 20px;
+	padding: 5px;
+	text-align: center;
+	font-weight: bold;
+	background-color:#b0e0e6;
+}
+
+div#contactInfo input,textarea{
+	font-size:14px;
+	padding:3px;
+	margin:5px;
+}
+
+div#contactInfo input#sei,input#mei{
+	width:150px;
+}
+
+div#contactInfo input#mail{
+	width:250px;
+}
+
+div#contactInfo textarea#beerDescription{
+	width:500px;
+	height:100px;
+}
+
+div#contactInfo option{
+	font-size:14px;
+	margin:3px 0px 3px 10px;
+}
+
+div#contactInfo p{
+	margin: 0 0 20px 0;
+}
+
+.error{
+	color:red;
+}
+.f_red{
+	color:#dc143c;
+	font-weight:bold;
+}
+
+/* ボタン */
+div#btn_area{
+	text-align:center;
+}
+div#contactInfo .btn{
+	width: 100px;
+	padding:0px;
+	margin:0px;
+}
+
+
+/**********************************
+	テーブル
+***********************************/
+
+table.contact_tbl {
+    width: 100%;
+    border: 1px #E3E3E3 solid;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0 0 20px 0px;
+}
+
+table.contact_tbl th {
+	width:120px;
+    padding: 5px;
+    border: #E3E3E3 solid;
+    border-width: 0 0 1px 1px;
+    background: #ECF0F1;
+    font-weight: bold;
+    line-height: 120%;
+    text-align: left;
+    white-space:nowrap;
+}
+
+table.contact_tbl td {
+    padding: 5px;
+    border: 1px #E3E3E3 solid;
+    border-width: 0 0 1px 1px;
+    text-align: left;
+    background-color: #ffffff;
+}
+
+/**********************************
+	送信完了画面
+***********************************/
+
+div#contactInfo div#thanks{
+    margin: 10px 0 10px 0;
+    padding: 5px;
+	text-align:left;
+	background: #F5F5F5;
+}
+
+.cboth{
+	clear:both;
+}
